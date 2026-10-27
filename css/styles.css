@@ -54,6 +54,7 @@ body {
 
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
+[hidden] { display: none !important; }
 h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.15; margin: 0 0 .5em; letter-spacing: .01em; }
 p { margin: 0 0 1em; }
 em { font-style: italic; }

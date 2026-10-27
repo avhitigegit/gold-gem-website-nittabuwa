@@ -1,0 +1,12 @@
+# Not part of the website
+input
+test.PNG
+*.png.bak
+gold-gem-prices.csv
+gold-gem-site.zip
+_probe.html
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.vscode/

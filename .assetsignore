@@ -1,0 +1,10 @@
+# Files Cloudflare must NOT publish
+.git
+.wrangler
+.gitignore
+.assetsignore
+wrangler.jsonc
+input
+test.PNG
+gold-gem-prices.csv
+gold-gem-site.zip

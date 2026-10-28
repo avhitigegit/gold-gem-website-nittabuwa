@@ -453,6 +453,20 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .contact-form { margin-top: 2rem; text-align: left; }
 .contact-or { margin: 1.8rem 0 1rem; color: var(--muted); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; }
 .footer-contact a { color: var(--gold-light); }
+
+/* ---------- Jewelry products & social ---------- */
+.product-card .gem-media { aspect-ratio: 1; }
+.product-card .gem-body h3 { font-size: 1.6rem; }
+.product-card .gem-sub { font-size: 1rem; }
+.product-card .gem-price { margin-bottom: 1rem; }
+.social-links { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; gap: .8rem; }
+.social-links a { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(212, 175, 55, .55); color: var(--gold-light); transition: background .3s, color .3s, transform .3s; }
+.social-links a:hover { background: var(--gold); color: var(--navy-950); transform: translateY(-2px); }
+.social-links svg { width: 20px; height: 20px; fill: currentColor; }
+.social-links svg.stroke { fill: none; stroke: currentColor; stroke-width: 1.8; }
+.social-links svg.stroke circle:last-child { fill: currentColor; }
+.social-links-footer { justify-content: flex-start; margin-top: 1rem; }
+.social-links-footer a { width: 38px; height: 38px; }
 .footer-contact { margin-top: .8rem; word-break: break-word; }
 
 /* ---------- Footer ---------- */

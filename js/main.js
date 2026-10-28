@@ -7,6 +7,8 @@ const CONFIG = {
   shopName: "Mr.Sapphire",
   whatsappNumber: "94710800816",       // country code + number, digits only
   // Google Sheet ("Prices" tab, published as CSV). Leave empty to use the built-in prices below.
+  // Optional: jewelry sheet (columns id, price, show) published as CSV. Empty = prices in PRODUCTS below.
+  productsUrl: "",
   pricesUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUt-9bt-Iptq00eu_mzk28uVSTe0h33OMbrk43q8-Uq4O6tA01FaMS4h9enewo3l0UC8WE1Y_qhtc_/pub?gid=0&single=true&output=csv",
 };
 
@@ -46,6 +48,16 @@ let GEMS = [
   { id: "tourmaline",      name: "Tourmaline",      color: "pink",   hex: "#d4588c", ppc: 20000,  note: "Pink & green tones" },
   { id: "amethyst",        name: "Amethyst",        color: "purple", hex: "#9b5fd0", ppc: 4000,   note: "Classic purple quartz" },
   { id: "zircon",          name: "Zircon",          color: "orange", hex: "#d98a3a", ppc: 12000,  note: "Fiery golden-brown" },
+];
+
+/* ---------- Jewelry products (price in LKR, 0 = price on request) ---------- */
+let PRODUCTS = [
+  { id: "garnet-ladies-ring",  name: "Garnet Ladies Ring",  detail: "Natural garnet with sparkling accent stones",        price: 25000, tag: "Garnet",        hex: "#8e1b2c" },
+  { id: "garnet-mens-ring",    name: "Garnet Men's Ring",   detail: "Cushion-cut garnet in a bold signet setting",        price: 35000, tag: "Garnet",        hex: "#8e1b2c" },
+  { id: "blue-sapphire-ring",  name: "Blue Sapphire Ring",  detail: "Stone weight 1.02 ct · pear cut with double halo",   price: 50000, tag: "Blue Sapphire", hex: "#2a5bd7" },
+  { id: "natural-ruby-ring",   name: "Natural Ruby Ring",   detail: "A row of round natural rubies, half-eternity style", price: 40000, tag: "Ruby",          hex: "#c8203a" },
+  { id: "pink-sapphire-ring",  name: "Pink Sapphire Ring",  detail: "Natural corundum pink sapphire, cushion cut",        price: 0,     tag: "Pink Sapphire", hex: "#e0609a" },
+  { id: "certified-ruby-ring", name: "Certified Ruby Ring", detail: "AGCL certified · 0.66 ct pigeon blood red · heated", price: 0,     tag: "Ruby",          hex: "#c8203a" },
 ];
 
 /* ---------- Helpers ---------- */
@@ -165,6 +177,50 @@ async function loadPrices() {
     renderMoreGems();
   } catch (err) {
     console.warn("Live prices unavailable, showing built-in prices.", err);
+  }
+}
+
+/* ---------- Jewelry collection ---------- */
+function renderProducts() {
+  $("#product-grid").innerHTML = PRODUCTS.filter((p) => p.show !== false).map((p) => {
+    const price = p.price > 0 ? lkr(p.price) : "Price on request";
+    const msg = `Hello ${CONFIG.shopName}, I'm interested in the ${p.name}${p.price > 0 ? ` (${lkr(p.price)})` : ""}. Is it available?`;
+    return `
+      <article class="gem-card product-card">
+        <div class="gem-media">
+          <img loading="lazy" src="images/products/${p.id}.webp" alt="${escapeHTML(p.name)}" width="800" height="800">
+          <span class="gem-tag" style="--chip:${p.hex}">${escapeHTML(p.tag)}</span>
+        </div>
+        <div class="gem-body">
+          <h3>${escapeHTML(p.name)}</h3>
+          <p class="gem-sub">${escapeHTML(p.detail)}</p>
+          <p class="gem-price"><strong>${price}</strong></p>
+          <div class="gem-actions">
+            <a href="${waLink(msg)}" class="btn btn-gold btn-sm" target="_blank" rel="noopener">Order on WhatsApp</a>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+// Optional live prices for jewelry (sheet columns: id, price, show)
+async function loadProducts() {
+  if (!CONFIG.productsUrl) return;
+  try {
+    const res = await fetch(CONFIG.productsUrl, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status);
+    const [head, ...rows] = parseCSV(await res.text());
+    const col = Object.fromEntries(head.map((h, i) => [h.trim().toLowerCase(), i]));
+    rows.forEach((r) => {
+      const p = PRODUCTS.find((x) => x.id === (r[col.id] || "").trim().toLowerCase());
+      if (!p) return;
+      const price = Number((r[col.price] || "").replace(/[^\d.]/g, ""));
+      if (!Number.isNaN(price)) p.price = price;
+      p.show = (r[col.show] || "yes").trim().toLowerCase() !== "no";
+    });
+    renderProducts();
+  } catch (err) {
+    console.warn("Live jewelry prices unavailable, showing built-in prices.", err);
   }
 }
 
@@ -323,6 +379,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initMoreGems();
   loadPrices();
+  renderProducts();
+  loadProducts();
   initTrade();
   initContact();
   initReveal();

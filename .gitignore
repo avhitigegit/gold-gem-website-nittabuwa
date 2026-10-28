@@ -11,3 +11,7 @@ Thumbs.db
 .DS_Store
 .vscode/
 .wrangler/
+
+# Screenshots shared while working
+/*.PNG
+/*.png

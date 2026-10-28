@@ -6,7 +6,6 @@
 const CONFIG = {
   shopName: "Mr.Sapphire",
   whatsappNumber: "94710800816",       // country code + number, digits only
-  whatsappDisplay: "+94 71 080 0816",
   // Google Sheet ("Prices" tab, published as CSV). Leave empty to use the built-in prices below.
   pricesUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUt-9bt-Iptq00eu_mzk28uVSTe0h33OMbrk43q8-Uq4O6tA01FaMS4h9enewo3l0UC8WE1Y_qhtc_/pub?gid=0&single=true&output=csv",
 };
@@ -96,7 +95,6 @@ function initWhatsAppLinks() {
     a.target = "_blank";
     a.rel = "noopener";
   });
-  $("#wa-display").textContent = CONFIG.whatsappDisplay;
 }
 
 /* ---------- Live prices from Google Sheets ---------- */

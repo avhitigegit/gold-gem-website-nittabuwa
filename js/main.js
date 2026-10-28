@@ -1,10 +1,10 @@
 /* =========================================================
-   Gold Gem — site behaviour (vanilla JS, no dependencies)
+   Mr.Sapphire — site behaviour (vanilla JS, no dependencies)
    ========================================================= */
 
 /* ---------- Shop settings: edit these in one place ---------- */
 const CONFIG = {
-  shopName: "Gold Gem",
+  shopName: "Mr.Sapphire",
   whatsappNumber: "94710800816",       // country code + number, digits only
   whatsappDisplay: "+94 71 080 0816",
   // Google Sheet ("Prices" tab, published as CSV). Leave empty to use the built-in prices below.

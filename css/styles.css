@@ -139,6 +139,10 @@ em { font-style: italic; }
 .brand { display: inline-flex; align-items: center; gap: .55rem; font-family: var(--serif); font-size: 1.65rem; font-weight: 600; letter-spacing: .04em; }
 .brand-mark { color: var(--gold); font-size: 1.1rem; animation: spin-slow 12s linear infinite; display: inline-block; }
 .brand-name em { font-style: italic; color: var(--gold); }
+.brand-logo { width: 52px; height: 52px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(212, 175, 55, .55), 0 4px 14px rgba(0, 0, 0, .45); }
+.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-tag { font-family: var(--sans, inherit); font-size: .62rem; font-weight: 400; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); margin-top: .3rem; }
+.site-footer .brand-logo { width: 64px; height: 64px; }
 @keyframes spin-slow { to { transform: rotateY(360deg); } }
 
 .nav-menu { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 1.6rem; }
@@ -517,6 +521,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 @media (max-width: 640px) {
   :root { --header-h: 66px; }
   .brand { font-size: 1.4rem; }
+  .brand-logo { width: 44px; height: 44px; }
   .hero-stats { gap: 1.4rem; }
   .hero-stats strong { font-size: 1.7rem; }
   .gem-grid, .timeline, .trust-grid { grid-template-columns: 1fr; }

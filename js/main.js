@@ -6,9 +6,9 @@
 const CONFIG = {
   shopName: "Mr.Sapphire",
   whatsappNumber: "94710800816",       // country code + number, digits only
-  // Google Sheet ("Prices" tab, published as CSV). Leave empty to use the built-in prices below.
-  // Optional: jewelry sheet (columns id, price, show) published as CSV. Empty = prices in PRODUCTS below.
-  productsUrl: "",
+  // Google Sheet ("Prices" tab, published as CSV) with gems and jewelry in one list.
+  // Columns: type (Gem / Jewelry), id, name, color, price, note, featured, show.
+  // Leave empty to use the built-in prices below.
   pricesUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUt-9bt-Iptq00eu_mzk28uVSTe0h33OMbrk43q8-Uq4O6tA01FaMS4h9enewo3l0UC8WE1Y_qhtc_/pub?gid=0&single=true&output=csv",
 };
 
@@ -130,31 +130,52 @@ function parseCSV(text) {
   return rows;
 }
 
-function sheetToGems(text) {
+// Read the sheet into plain row objects (keys = lower-case headers)
+function sheetRows(text) {
   const [head, ...rows] = parseCSV(text);
-  const col = Object.fromEntries(head.map((h, i) => [h.trim().toLowerCase(), i]));
-  const get = (r, key) => (r[col[key]] ?? "").trim();
-  const yes = (v) => v.toLowerCase() === "yes";
+  const keys = head.map((h) => h.trim().toLowerCase());
+  return rows.map((r) => Object.fromEntries(keys.map((k, i) => [k, (r[i] ?? "").trim()])));
+}
+
+const isYes = (v) => (v || "").toLowerCase() === "yes";
+const isJewelry = (row) => (row.type || "").toLowerCase().startsWith("jewel");
+const priceOf = (row) => Number((row.price ?? row.price_per_ct ?? "").replace(/[^\d.]/g, ""));
+
+function sheetToGems(rows) {
   const builtIn = Object.fromEntries(GEMS.map((g) => [g.id, g]));
 
-  return rows.map((r) => {
-    const id = get(r, "id").toLowerCase();
-    const ppc = Number(get(r, "price_per_ct").replace(/[^\d.]/g, ""));
-    const color = get(r, "color").toLowerCase();
+  return rows.filter((r) => !isJewelry(r)).map((r) => {
+    const id = (r.id || "").toLowerCase();
+    const ppc = priceOf(r);
+    const color = (r.color || "").toLowerCase();
     if (!id || !(ppc > 0)) return null;               // skip blank or broken rows
     const known = COLORS.find((c) => c.id === color && c.hex);
     const base = builtIn[id] || {};
     return {
       id,
-      name: get(r, "name") || base.name || id,
+      name: r.name || base.name || id,
       color: known ? color : base.color || "white",
       hex: base.hex || (known ? known.hex : "#e6ecf5"),
       ppc,
-      note: get(r, "note") || base.note || "",
-      featured: yes(get(r, "featured")),
-      show: get(r, "show") === "" || yes(get(r, "show")),
+      note: r.note || base.note || "",
+      featured: isYes(r.featured),
+      show: !r.show || isYes(r.show),
     };
   }).filter(Boolean);
+}
+
+// Jewelry rows update the rings already on the site (matched by id, each needs a photo)
+function applyJewelryRows(rows) {
+  rows.filter(isJewelry).forEach((r) => {
+    const p = byId(PRODUCTS, (r.id || "").toLowerCase());
+    if (!p) return;
+    const price = priceOf(r);
+    p.price = price > 0 ? price : 0;                  // blank or 0 = price on request
+    if (r.name) p.name = r.name;
+    if (r.note) p.detail = r.note;
+    p.show = !r.show || isYes(r.show);
+  });
+  renderProducts();
 }
 
 async function loadPrices() {
@@ -162,7 +183,9 @@ async function loadPrices() {
   try {
     const res = await fetch(CONFIG.pricesUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(res.status);
-    const gems = sheetToGems(await res.text());
+    const rows = sheetRows(await res.text());
+    applyJewelryRows(rows);
+    const gems = sheetToGems(rows);
     if (!gems.length) throw new Error("no rows");
     GEMS = gems.filter((g) => g.show);
 
@@ -201,27 +224,6 @@ function renderProducts() {
         </div>
       </article>`;
   }).join("");
-}
-
-// Optional live prices for jewelry (sheet columns: id, price, show)
-async function loadProducts() {
-  if (!CONFIG.productsUrl) return;
-  try {
-    const res = await fetch(CONFIG.productsUrl, { cache: "no-store" });
-    if (!res.ok) throw new Error(res.status);
-    const [head, ...rows] = parseCSV(await res.text());
-    const col = Object.fromEntries(head.map((h, i) => [h.trim().toLowerCase(), i]));
-    rows.forEach((r) => {
-      const p = PRODUCTS.find((x) => x.id === (r[col.id] || "").trim().toLowerCase());
-      if (!p) return;
-      const price = Number((r[col.price] || "").replace(/[^\d.]/g, ""));
-      if (!Number.isNaN(price)) p.price = price;
-      p.show = (r[col.show] || "yes").trim().toLowerCase() !== "no";
-    });
-    renderProducts();
-  } catch (err) {
-    console.warn("Live jewelry prices unavailable, showing built-in prices.", err);
-  }
 }
 
 /* ---------- More gems filter ---------- */
@@ -378,9 +380,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initWhatsAppLinks();
   initNav();
   initMoreGems();
-  loadPrices();
   renderProducts();
-  loadProducts();
+  loadPrices();
   initTrade();
   initContact();
   initReveal();

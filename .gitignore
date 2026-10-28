@@ -2,7 +2,7 @@
 input
 test.PNG
 *.png.bak
-gold-gem-prices.csv
+*.csv
 gold-gem-site.zip
 _probe.html
 

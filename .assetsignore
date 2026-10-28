@@ -6,7 +6,7 @@
 wrangler.jsonc
 input
 test.PNG
-gold-gem-prices.csv
+*.csv
 gold-gem-site.zip
 logo.jpeg
 images/*.jpeg

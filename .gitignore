@@ -11,3 +11,7 @@ input
 .vscode/
 Thumbs.db
 .DS_Store
+
+# Private project notes
+HANDBOOK.md
+*.pdf

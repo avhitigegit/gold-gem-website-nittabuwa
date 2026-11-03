@@ -12,3 +12,5 @@ Gem and jewelry prices, notes and show/hide come from the client's Google Sheet
 within ~5 minutes — no deploy needed. Built-in prices in `js/main.js` are only a fallback.
 
 New rings need a photo in `images/products/<id>.webp` plus an entry in `PRODUCTS` in `js/main.js`.
+
+Full private notes (accounts, renewals, how-tos): `HANDBOOK.md` in the local project folder (not in git).

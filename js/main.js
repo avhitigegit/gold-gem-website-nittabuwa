@@ -9,7 +9,7 @@ const CONFIG = {
   // Google Sheet ("Prices" tab, published as CSV) with gems and jewelry in one list.
   // Columns: type (Gem / Jewelry), id, name, color, price, note, featured, show.
   // Leave empty to use the built-in prices below.
-  pricesUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUt-9bt-Iptq00eu_mzk28uVSTe0h33OMbrk43q8-Uq4O6tA01FaMS4h9enewo3l0UC8WE1Y_qhtc_/pub?gid=0&single=true&output=csv",
+  pricesUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1DC-Wk73TITiMiiFBpdCP9uKjN9LxNNEaNxkHtJFI3I22KXi9hmn-D-ZFdOOO3rSGUaVzGKjGlPAa/pub?gid=0&single=true&output=csv",
 };
 
 /* ---------- Gem catalogue (indicative LKR price per carat) ----------
@@ -28,7 +28,7 @@ const COLORS = [
 
 let GEMS = [
   // Signature five
-  { id: "blue-sapphire",   name: "Blue Sapphire",   color: "blue",   hex: "#2a5bd7", ppc: 45000,  featured: true, note: "Royal & cornflower blue" },
+  { id: "blue-sapphire",   name: "Blue Sapphire",   color: "blue",   hex: "#2a5bd7", ppc: 35000,  featured: true, note: "Royal & cornflower blue" },
   { id: "pink-sapphire",   name: "Pink Sapphire",   color: "pink",   hex: "#e0609a", ppc: 38000,  featured: true, note: "Blush to vivid pink" },
   { id: "yellow-sapphire", name: "Yellow Sapphire", color: "yellow", hex: "#e8b923", ppc: 17000,  featured: true, note: "Golden Pushparaga" },
   { id: "padparadscha",    name: "Padparadscha",    color: "orange", hex: "#f08a5d", ppc: 120000, featured: true, note: "Rare lotus pink-orange" },

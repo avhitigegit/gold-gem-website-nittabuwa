@@ -1,16 +1,14 @@
-# Files Cloudflare must NOT publish
+# Files Cloudflare must NOT publish (everything else in this folder goes live)
 .git
+.github
 .wrangler
 .gitignore
 .assetsignore
 wrangler.jsonc
-input
-test.PNG
+README.md
 *.csv
-gold-gem-site.zip
-logo.jpeg
-images/*.jpeg
-
-# Screenshots shared while working
-/*.PNG
 /*.png
+/*.PNG
+/*.jpeg
+/*.jpg
+input

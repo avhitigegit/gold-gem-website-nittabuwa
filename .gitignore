@@ -1,17 +1,13 @@
-# Not part of the website
-input
-test.PNG
-*.png.bak
+# Keep the repo to website files only
 *.csv
-gold-gem-site.zip
-_probe.html
+/*.png
+/*.PNG
+/*.jpeg
+/*.jpg
+input
 
-# OS / editor
+# Tools / OS
+.wrangler/
+.vscode/
 Thumbs.db
 .DS_Store
-.vscode/
-.wrangler/
-
-# Screenshots shared while working
-/*.PNG
-/*.png

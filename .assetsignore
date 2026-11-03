@@ -10,3 +10,7 @@ test.PNG
 gold-gem-site.zip
 logo.jpeg
 images/*.jpeg
+
+# Screenshots shared while working
+/*.PNG
+/*.png

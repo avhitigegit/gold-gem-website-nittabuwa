@@ -1,6 +1,6 @@
 // Cloudflare deploy settings: serve this folder as a static site
 {
-  "name": "goldgem-uat",
+  "name": "mrsapphire",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./"
